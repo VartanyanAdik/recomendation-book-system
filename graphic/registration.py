@@ -6,7 +6,7 @@ root.title('Авторизация')# Заголовок окна
 root.geometry('900x700')# Размеры окна
 root.resizable(width=FALSE, height=FALSE)# Если надо будет ограничить растяжение.
 root['bg']='gold'# цвет окна внутри
-image=PhotoImage(file="../resurs/book.png")
+image=PhotoImage(file="../resurs/image/book.png")
 label=Label(root, image=image)
 label.place(x=0, y=0)
 
