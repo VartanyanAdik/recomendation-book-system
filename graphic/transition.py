@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import *
 
-from database.Db import save_database
+from database.db import save_database
 from entity.user import User
 
 window = tk.Tk()
@@ -82,3 +82,4 @@ def register():
 
 
 register()
+
