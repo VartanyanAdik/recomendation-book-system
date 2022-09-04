@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import *
 
+from crypto.cipher import password_encryption
 from database.db import save_database
 from entity.user import User
 
@@ -59,27 +60,27 @@ def register():
     text_password.place(x=320, y=400)
     entry_password = Entry(show='*')
     entry_password.place(x=400, y=440)
-    text_repeatpassword = Label(text='Повторите пароль:', font='Arial 18', bg='gold', fg='black', padx=30)
-    text_repeatpassword.place(x=328, y=485)
-    entry_repeatpassword = Entry(show='*')
-    entry_repeatpassword.place(x=400, y=525)
+    text_repeat_password = Label(text='Повторите пароль:', font='Arial 18', bg='gold', fg='black', padx=30)
+    text_repeat_password.place(x=328, y=485)
+    entry_repeat_password = Entry(show='*')
+    entry_repeat_password.place(x=400, y=525)
     button_register = Button(text='Зарегистрироваться!', bg='gold', font='Arial 13', command=lambda: log_pass())
     button_register.place(x=370, y=565)
     button1 = tk.Button(text="Уже есть аккаунт!", bg='gold', font='Arial 13', command=click_button)
     button1.place(x=385, y=610)
 
     def log_pass():
-        if entry_password.get() == entry_repeatpassword.get():
+        if entry_password.get() == entry_repeat_password.get():
             firstname = entry_firstname.get()
             lastname = entry_lastname.get()
             patronymic = entry_patronymic.get()
             login = entry_login.get()
             password = entry_password.get()
-            per = User(firstname, lastname, patronymic, login, password)
+            cipher_password = password_encryption(password)
+            per = User(firstname, lastname, patronymic, login, cipher_password)
             save_database(per)
 
     tk.mainloop()
 
 
 register()
-
