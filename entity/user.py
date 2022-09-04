@@ -9,5 +9,3 @@ class User():
     def __str__(self):
         return f"User(firstname={self.firstname}, lastname={self.lastname}, patronymic={self.patronymic}, " \
                f"login={self.login}, password={self.password})"
-
-

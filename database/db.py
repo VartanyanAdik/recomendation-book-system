@@ -13,3 +13,6 @@ def save_database(user):
 
 
 save_database(test_user_one)
+save_database(test_user_two)
+save_database(test_user_three)
+save_database(test_user_four)
