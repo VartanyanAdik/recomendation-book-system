@@ -1,8 +1,9 @@
 import tkinter as tk
 from tkinter import *
-
+from tkinter import messagebox
+from stra import stranica
 from crypto.cipher import password_encryption
-from database.db import save_database
+from database.db import save_database, database_dict, check_user
 from entity.user import User
 
 window = tk.Tk()
@@ -23,18 +24,25 @@ def click_button():
     window2.resizable(width=FALSE, height=FALSE)  # Если надо будет ограничить растяжение.
     text = Label(window2, text='Добро пожаловать!', font='Arial 30', bg='gold', fg='black')
     text.place(x=280, y=20)
-    text_patronymic = Label(window2, text='Введите логин:', font='Arial 18', bg='gold', fg='black', padx=30)
-    text_patronymic.place(x=350, y=230)
-    register_lodin = Entry(window2)
-    register_lodin.place(x=400, y=270)
-    text_log = Label(window2, text='Введите пароль:', font='Arial 18', bg='gold', fg='black', padx=30)
-    text_log.place(x=340, y=315)
-    register_log = Entry(window2, show='*')
-    register_log.place(x=400, y=355)
-    button_register = Button(window2, text='Войти', bg='gold', font='Arial 13')
-    button_register.place(x=432, y=400)
-    button_register = Button(window2, text='Забыли пароль?', bg='gold', font='Arial 13')
-    button_register.place(x=392, y=460)
+    text_login = Label(window2, text='Введите логин:', font='Arial 18', bg='gold', fg='black', padx=30)
+    text_login.place(x=350, y=230)
+    authorization_login_entry = Entry(window2)
+    authorization_login_entry.place(x=400, y=270)
+    authorization_password = Label(window2, text='Введите пароль:', font='Arial 18', bg='gold', fg='black', padx=30)
+    authorization_password.place(x=340, y=315)
+    authorization_password_entry = Entry(window2, show='*')
+    authorization_password_entry.place(x=400, y=355)
+    button_input = Button(window2, text='Войти', bg='gold', font='Arial 13', command=lambda: bulk())
+    button_input.place(x=432, y=400)
+    button_forgot = Button(window2, text='Забыли пароль?', bg='gold', font='Arial 13')
+    button_forgot.place(x=392, y=460)
+
+    def bulk():
+        if check_user(authorization_login_entry.get(), authorization_password_entry.get()):
+            window2.destroy()
+            stranica()
+        else:
+            messagebox.showerror("Error", "Wrong login or password!")
 
 
 def register():
@@ -79,6 +87,8 @@ def register():
             cipher_password = password_encryption(password)
             per = User(firstname, lastname, patronymic, login, cipher_password)
             save_database(per)
+
+
 
     tk.mainloop()
 
