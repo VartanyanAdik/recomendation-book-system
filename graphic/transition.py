@@ -5,6 +5,9 @@ from stra import stranica
 from crypto.cipher import password_encryption
 from database.db import save_database, database_dict, check_user
 from entity.user import User
+import re
+import string
+
 
 window = tk.Tk()
 window.title("Регистрация")
@@ -15,12 +18,12 @@ image = PhotoImage(file="../resource/image/entry.png")
 label = Label(window, image=image)
 label.place(x=0, y=0)
 
-
 def click_button():
     window.destroy()
     window2 = tk.Tk()
     window2.title("Авторизация")
     window2.geometry("900x700")
+    window2['bg'] = 'gold'
     window2.resizable(width=FALSE, height=FALSE)  # Если надо будет ограничить растяжение.
     text = Label(window2, text='Добро пожаловать!', font='Arial 30', bg='gold', fg='black')
     text.place(x=280, y=20)
@@ -72,11 +75,70 @@ def register():
     text_repeat_password.place(x=328, y=485)
     entry_repeat_password = Entry(show='*')
     entry_repeat_password.place(x=400, y=525)
-    button_register = Button(text='Зарегистрироваться!', bg='gold', font='Arial 13', command=lambda: log_pass())
+    button_register = Button(text='Зарегистрироваться!', bg='gold', font='Arial 13', command=lambda: validate())
     button_register.place(x=370, y=565)
     button1 = tk.Button(text="Уже есть аккаунт!", bg='gold', font='Arial 13', command=click_button)
     button1.place(x=385, y=610)
-
+    def validate():
+        while True:
+            validate_firstname = entry_firstname.get()
+            if len(validate_firstname) < 1:
+                messagebox.showerror("Ошибка", "Слишком короткое имя")
+                break
+            if not re.search('^[A-Z, a-z]*$', validate_firstname):
+                messagebox.showerror("Ошибка", "Имя должно содержать только английские буквы!")
+                break
+            if re.search('[0-9]', validate_firstname):
+                messagebox.showerror("Ошибка", "Имя не должно содержать цифры!")
+                break
+            if re.search('[A-Z]', validate_firstname[0:1]) is None:
+                messagebox.showerror("Ошибка", "Имя должно начинаться с большой буквы!")
+                break
+            validate_lastname = entry_lastname.get()
+            if len(validate_lastname) < 1:
+                messagebox.showerror("Ошибка", "Слишком короткая фамилия")
+                break
+            if not re.search("^[A-Z, a-z]*$", validate_lastname):
+                messagebox.showerror("Ошибка", "Фамилия должна содержать только английские буквы!")
+                break
+            if re.search('[0-9]', validate_lastname):
+                messagebox.showerror("Ошибка", "Фамилия не должна содержать цифры!")
+                break
+            if re.search('[A-Z]', validate_lastname[0:1]) is None:
+                messagebox.showerror("Ошибка", "Фамилия должна начинаться с большой буквы!")
+                break
+            validate_patronymic = entry_patronymic.get()
+            if len(validate_patronymic) < 1:
+                messagebox.showerror("Ошибка", "Слишком короткое отчество")
+                break
+            if not re.search("^[A-Z, a-z]*$", validate_patronymic):
+                messagebox.showerror("Ошибка", "Отчество должно содержать только английские буквы!")
+                break
+            if re.search('[0-9]', validate_patronymic):
+                messagebox.showerror("Ошибка", "Отчество не должно содержать цифры!")
+                break
+            if re.search('[A-Z]', validate_patronymic[0:1]) is None:
+                messagebox.showerror("Ошибка", "Отчество должно начинаться с большой буквы!")
+                break
+            validate_login = entry_login.get()
+            if len(validate_login) < 6:
+                messagebox.showerror("Ошибка", "Логин должен содержать не менее 6 символов!")
+                break
+            if not re.search('[0-9]', validate_login):
+                messagebox.showerror("Ошибка", "Логин должен содержать минимум 1 цифру!")
+                break
+            validate_password = entry_password.get()
+            validate_password_repeat = entry_repeat_password.get()
+            if len(validate_password) < 8:
+                messagebox.showerror("Ошибка", "Пароль должен содержать не менее 8 символов!")
+                break
+            if validate_password != validate_password_repeat:
+                messagebox.showerror("Ошибка", "Пароли должны совпадать!")
+                break
+            else:
+                log_pass()
+                messagebox.showinfo("Успешно", "Вы успешно зарегистрировались!")
+                break
     def log_pass():
         if entry_password.get() == entry_repeat_password.get():
             firstname = entry_firstname.get()
@@ -87,6 +149,7 @@ def register():
             cipher_password = password_encryption(password)
             per = User(firstname, lastname, patronymic, login, cipher_password)
             save_database(per)
+
 
 
 
