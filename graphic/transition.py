@@ -1,12 +1,13 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox
-from stra import stranica
+from stra import avatar
 from crypto.cipher import password_encryption
 from database.db import save_database, database_dict, check_user
 from entity.user import User
 import re
 import string
+from PIL import *
 
 
 window = tk.Tk()
@@ -43,7 +44,7 @@ def click_button():
     def bulk():
         if check_user(authorization_login_entry.get(), authorization_password_entry.get()):
             window2.destroy()
-            stranica()
+            avatar()
         else:
             messagebox.showerror("Error", "Wrong login or password!")
 
