@@ -1,25 +1,23 @@
+import re
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox
-from stra import avatar
 from crypto.cipher import password_encryption
-from database.db import save_database, database_dict, check_user
+from database.db import save_database, check_user
 from entity.user import User
-import re
-import string
-from PIL import *
+from stra import profile_window
 
-
-window = tk.Tk()
-window.title("Регистрация")
-window.geometry("900x700")
+window = tk.Tk() #создание главного окна
+window.title("Регистрация") #название окна
+window.geometry("900x700") #размеры окна
 window.resizable(width=FALSE, height=FALSE)  # Если надо будет ограничить растяжение.
 window['bg'] = 'gold'  # цвет окна внутри
-image = PhotoImage(file="../resource/image/entry.png")
-label = Label(window, image=image)
-label.place(x=0, y=0)
+image_window = PhotoImage(file="/home/arkadi/PycharmProjects/recomendation-book-system/resource/image/book.png")
+label = Label(window, image=image_window)
+label.place(x=0, y=0) #выведение фотографии
 
-def click_button():
+
+def window_authorization(): # окно авторизации
     window.destroy()
     window2 = tk.Tk()
     window2.title("Авторизация")
@@ -36,20 +34,20 @@ def click_button():
     authorization_password.place(x=340, y=315)
     authorization_password_entry = Entry(window2, show='*')
     authorization_password_entry.place(x=400, y=355)
-    button_input = Button(window2, text='Войти', bg='gold', font='Arial 13', command=lambda: bulk())
+    button_input = Button(window2, text='Войти', bg='gold', font='Arial 13', command=lambda: login_button())# нажатие на кнопку для входа или ошибки
     button_input.place(x=432, y=400)
     button_forgot = Button(window2, text='Забыли пароль?', bg='gold', font='Arial 13')
     button_forgot.place(x=392, y=460)
 
-    def bulk():
+    def login_button():
         if check_user(authorization_login_entry.get(), authorization_password_entry.get()):
-            window2.destroy()
-            avatar()
+            window2.destroy() #удаление окна авторизации
+            profile_window() # вызов функции окна профиля
         else:
             messagebox.showerror("Error", "Wrong login or password!")
 
 
-def register():
+def register_window(): #окно регистрации
     text = Label(window, text='Для входа в систему-зарегистритуйтесь!', font='Arial 30', bg='gold', fg='black')
     text.place(x=70, y=0)
     text_firstname = Label(window, text='Введите ваше имя:', font='Arial 18', bg='gold', fg='black')
@@ -78,9 +76,10 @@ def register():
     entry_repeat_password.place(x=400, y=525)
     button_register = Button(text='Зарегистрироваться!', bg='gold', font='Arial 13', command=lambda: validate())
     button_register.place(x=370, y=565)
-    button1 = tk.Button(text="Уже есть аккаунт!", bg='gold', font='Arial 13', command=click_button)
+    button1 = tk.Button(text="Уже есть аккаунт!", bg='gold', font='Arial 13', command=window_authorization)#кнопка для перехода на окно авторизации
     button1.place(x=385, y=610)
-    def validate():
+
+    def validate(): #валидация
         while True:
             validate_firstname = entry_firstname.get()
             if len(validate_firstname) < 1:
@@ -140,7 +139,8 @@ def register():
                 log_pass()
                 messagebox.showinfo("Успешно", "Вы успешно зарегистрировались!")
                 break
-    def log_pass():
+
+    def log_pass(): # сравнение и сохранения пароля
         if entry_password.get() == entry_repeat_password.get():
             firstname = entry_firstname.get()
             lastname = entry_lastname.get()
@@ -151,10 +151,7 @@ def register():
             per = User(firstname, lastname, patronymic, login, cipher_password)
             save_database(per)
 
-
-
-
     tk.mainloop()
 
 
-register()
+register_window()

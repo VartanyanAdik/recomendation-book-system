@@ -1,4 +1,4 @@
-def password_encryption(password):
+def password_encryption(password):#создаем шифрование
     lst = ''
     for password in password:
         password.capitalize().swapcase()
