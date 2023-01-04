@@ -1,5 +1,5 @@
-class User():
-    def __init__(self, firstname, lastname, patronymic, login, password):
+class User(): #создание класса юзера
+    def __init__(self, firstname, lastname, patronymic, login, password): #создание конструктора
         self.firstname = firstname
         self.lastname = lastname
         self.patronymic = patronymic
